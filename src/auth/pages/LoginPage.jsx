@@ -6,7 +6,7 @@ import { Google } from '@mui/icons-material';
 
 import AuthLayout from '../layout/AuthLayout';
 import { useForm } from '../../hooks/useForm';
-import { startGoolgeSignIn, startLoginWithEmailAndPawwsord } from '../../store/auth';
+import { startGoolgeSignIn, startLoginWithEmailAndPassword } from '../../store/auth';
 
 const formData = {
   email: '',
@@ -24,21 +24,22 @@ export const LoginPage = () => {
   const onSubmit = ( event ) => {
     
     event.preventDefault();
-    console.log({ email, password });
-    
-    dispatch( startLoginWithEmailAndPawwsord({ email, password }));
+    dispatch( startLoginWithEmailAndPassword({ email, password }));
 
   }
 
   const onGoogleSingIn = () => {
-    console.log('onGoogleSingIn');
-    dispatch(startGoolgeSignIn() );
+    dispatch( startGoolgeSignIn() );
   }
 
   return (
       <AuthLayout title="Login">
 
-          <form onSubmit={ onSubmit }  className='animate__animated animate__fadeIn animate_faster'>
+          <form 
+            aria-label='submit-form'
+            onSubmit={ onSubmit }  
+            className='animate__animated animate__fadeIn animate_faster'>
+
             <Grid container >
               <Grid item xs={ 12 } sx={{ mt:2 }}>
                 <TextField
@@ -57,6 +58,9 @@ export const LoginPage = () => {
                   type="password"
                   fullWidth
                   name="password"
+                  inputProps={{
+                    'data-testid' : 'password'
+                  }}
                   value={ password }
                   onChange={ onInputChange }
                 />
@@ -83,7 +87,9 @@ export const LoginPage = () => {
                 <Grid item xs={ 12 } sm={ 6 }>
                   <Button 
                           disabled={ isAuthenticating }
-                          variant='contained' fullWidth
+                          variant='contained'
+                          fullWidth
+                          aria-label='google-btn'
                           onClick={ onGoogleSingIn }>
                     <Google />
                     <Typography sx={{ ml:1 }}>Google</Typography>

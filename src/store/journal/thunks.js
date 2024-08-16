@@ -25,8 +25,6 @@ export const startNewNote = () => {
 
         dispatch( addNewEmptyNotes( newNote ));
         dispatch( setActiveNote( newNote ) );
-        //dispatch
-
     }
 }
 

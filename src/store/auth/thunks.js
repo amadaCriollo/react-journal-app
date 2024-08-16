@@ -1,8 +1,8 @@
-import { signInWithGoogle, registerUserWithEmailPassword, singInWithEmailAndPassword, logoutFirebase } from "../../firebase/providers";
-import { clearNotesLogout } from "../journal";
+import { signInWithGoogle, registerUserWithEmailPassword, singInWithEmailAndPassword, logoutFirebase } from '../../firebase/providers';
+import { clearNotesLogout } from '../journal';
 import { checkingCredentials, login, logout } from "./";
 
-export const checkingAuthentication = ( email, password ) => {
+export const checkingAuthentication = () => {
     return async( dispatch ) => {
         dispatch( checkingCredentials() );
     }
@@ -15,7 +15,6 @@ export const startGoolgeSignIn = () => {
         dispatch( checkingCredentials() );
         
         const result = await signInWithGoogle();
-        console.log({result});
         if ( !result.ok ) return dispatch( logout( result.errorMessage ) );
 
         dispatch( login( result ) );
@@ -25,28 +24,28 @@ export const startGoolgeSignIn = () => {
 export const startCreatingUserWithEmailPassword = ({ email, password, displayName }) => {
     return async(dispatch) => {
 
-        dispatch(checkingAuthentication() );
+        dispatch(checkingCredentials() );
 
-        const { ok, uid, photoURL, errorMessage } = await registerUserWithEmailPassword({ email, password, displayName });
+        const result = await registerUserWithEmailPassword({ email, password, displayName });
+        console.log(result)
+        if( !result.ok ) return dispatch( logout( result.errorMessage ));
 
-        if( !ok ) return dispatch( logout({ errorMessage }));
-
-        dispatch( login({ uid, displayName, email, photoURL }));
+        dispatch( login( result ));
     }
 
 }
 
-export const startLoginWithEmailAndPawwsord = ({ email, password }) => {
+export const startLoginWithEmailAndPassword = ({ email, password }) => {
 
     return async(dispatch) =>{
         
-        dispatch( checkingAuthentication() );
+        dispatch( checkingCredentials() );
 
-        const { ok, uid, photoURL, displayName, errorMessage } = await singInWithEmailAndPassword({ email, password });
+        const result = await singInWithEmailAndPassword({ email, password });
+        console.log(result)
+        if( !result.ok ) return dispatch( logout( result.errorMessage ));
 
-        if( !ok ) return dispatch( logout({ errorMessage }));
-
-        dispatch( login( {uid, photoURL, displayName } ) );
+        dispatch( login( result ) );
         
     }
 }

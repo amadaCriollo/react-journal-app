@@ -1,8 +1,10 @@
 export const fileUpload = async( file ) => {
 
-    if( !file) throw new Error('No hay imgene');
-    const cloudUrl = 'https://api.cloudinary.com/v1_1/udemyReact1/upload';
+    //if( !file) throw new Error('No hay imgene');
 
+    if( !file ) return null;
+    
+    const cloudUrl = 'https://api.cloudinary.com/v1_1/udemyReact1/upload';
     const formData = new FormData();
     formData.append('upload_preset', 'react-journal');
     formData.append('file', file);
@@ -20,6 +22,6 @@ export const fileUpload = async( file ) => {
         return cloudResp.secure_url;
 
     } catch (error) {
-        console.log(error);
+        return null;
     }
 }
